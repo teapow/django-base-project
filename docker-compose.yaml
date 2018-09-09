@@ -1,0 +1,42 @@
+version: '3'
+
+volumes:
+  site-nginx:
+  site-media:
+  site-postgres:
+  site-static:
+  site-uwsgi:
+
+services:
+  database:
+    image: postgres:10-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - site-postgres:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - site-media:/site/media
+      - site-nginx:/etc/nginx/conf.d
+      - site-static:/site/static
+      - site-uwsgi:/site/uwsgi
+    depends_on:
+      - uwsgi
+
+  uwsgi:
+    image: docker.tomm.io/teapow/site:latest
+    environment:
+      - DJANGO_DB_HOST=database
+      - DJANGO_SECRET_KEY=SECRET_KEY_GOES_HERE
+    command: uwsgi --ini=/app/uwsgi/uwsgi.ini
+    volumes:
+      - site-media:/app/media
+      - site-nginx:/app/nginx
+      - site-static:/app/static-collection
+      - site-uwsgi:/app/uwsgi
+    depends_on:
+      - database

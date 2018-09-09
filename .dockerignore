@@ -1,0 +1,14 @@
+# Git-related files
+.git
+.gitignore
+.gitmodules
+
+# Local development
+.idea
+*.sqlite3
+data
+project/local_settings.py
+
+# Django directories
+media
+static-collection
