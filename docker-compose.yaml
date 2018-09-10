@@ -1,11 +1,11 @@
-version: '3'
+version: '2.1'
 
 volumes:
-  site-nginx:
-  site-media:
-  site-postgres:
-  site-static:
-  site-uwsgi:
+  nginx_volume:
+  media_volume:
+  postgres_volume:
+  static_volume:
+  uwsgi_volume:
 
 services:
   database:
@@ -13,17 +13,22 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - site-postgres:/var/lib/postgresql/data
+      - postgres_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
     volumes:
-      - site-media:/site/media
-      - site-nginx:/etc/nginx/conf.d
-      - site-static:/site/static
-      - site-uwsgi:/site/uwsgi
+      - media_volume:/site/media
+      - nginx_volume:/etc/nginx/conf.d
+      - static_volume:/site/static
+      - uwsgi_volume:/site/uwsgi
     depends_on:
       - uwsgi
 
@@ -32,11 +37,11 @@ services:
     environment:
       - DJANGO_DB_HOST=database
       - DJANGO_SECRET_KEY=SECRET_KEY_GOES_HERE
-    command: uwsgi --ini=/app/uwsgi/uwsgi.ini
     volumes:
-      - site-media:/app/media
-      - site-nginx:/app/nginx
-      - site-static:/app/static-collection
-      - site-uwsgi:/app/uwsgi
+      - media_volume:/app/media
+      - nginx_volume:/app/nginx
+      - static_volume:/app/static-collection
+      - uwsgi_volume:/app/uwsgi
     depends_on:
-      - database
+      database:
+        condition: service_healthy
