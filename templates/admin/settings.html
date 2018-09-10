@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n static %}
+
+
+{% block content %}
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th>{% trans 'Key' %}</th>
+                <th>{% trans 'Value' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in settings.items %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td><code>{{ key }}</code></td>
+                    <td><code>{{ value }}</code></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

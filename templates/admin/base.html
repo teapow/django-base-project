@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+
+{% load i18n %}
+
+{% block userlinks %}
+    {% if user.is_superuser %}
+        <a href="{% url 'admin-settings' %}">{% trans 'View Settings' %}</a> /
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}
