@@ -20,25 +20,36 @@ Examples:
 
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import include, path, reverse
 from django.views.debug import get_safe_settings
 from django.views.generic import TemplateView
 
 admin.site.site_header = f"{settings.PROJECT_NAME} administration"
 admin.site.site_title = settings.PROJECT_NAME
 
-settings_view = TemplateView.as_view(
-    template_name="admin/settings.html",
-    extra_context={
+
+class AdminSettingsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    """View class for rendering the admin-settings page."""
+    extra_context = {
         "title": "Settings",
         "has_permission": True,
         "settings": get_safe_settings(),
         "site_url": "/",
-    },
-)
+    }
+    template_name = "admin/settings.html"
+
+    def get_login_url(self):
+        """Return the login URL for this view."""
+        return reverse("admin:login")
+
+    def test_func(self):
+        """Test whether or not the user can access this view."""
+        return self.request.user.is_superuser
+
 
 urlpatterns = [
-    path("admin/settings", settings_view, name="admin-settings"),
+    path("admin/settings", AdminSettingsView.as_view(), name="admin-settings"),
     path("admin/", admin.site.urls),
     path("status/", include("watchman.urls")),
 ]
