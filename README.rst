@@ -11,19 +11,21 @@ code quality/standards are maintained going forwards.
 Quick-start
 ===========
 
-1. Fork this project.
+1. Clone or fork this project.
 
-2. Install requirements: ``pip install -r requirements.txt``.
+2. Install requirements: ``pip install -r requirements-dev.txt``.
 
-3. Copy ``project/local_settings.example.py`` to ``project/local_settings.py``.
+3. Copy ``project/settings/local.example.py`` to ``project/settings/local.py``.
 
 4. (Optional) Edit your ``project/local_settings.py`` as desired.
 
-5. Make migrations: ``python manage.py makemigrations simple_authentication``.
+5. Set: ``DJANGO_SETTINGS_MODULE=project.settings.local``.
 
-6. Apply migrations: ``python manage.py migrate``.
+6. Make migrations: ``python manage.py makemigrations simple_authentication``.
 
-7. Run the development server: ``python manage.py runserver``.
+7. Apply migrations: ``python manage.py migrate``.
+
+8. Run the development server: ``python manage.py runserver``.
 
 
 Included tools
@@ -82,7 +84,7 @@ Running within Docker
 
 Modify ``docker-compose.yaml``, changing the ``services > uwsgi > image``
 value to match the name of the image that you built above. Then, from the
-root of the project, run ``docker-compose up -d``.
+root of the project, run ``docker-compose --project-name=site up -d``.
 
 You should then be able to access the application at http://localhost/admin.
 
