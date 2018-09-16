@@ -150,7 +150,7 @@ coverage.xml
 # Django stuff:
 *.log
 *.sqlite3
-local_settings.py
+project/settings/local.py
 media
 static-collection
 
@@ -252,7 +252,6 @@ tags
 [Ll]ib64
 [Ll]ocal
 [Mm]an
-[Ss]cripts
 [Tt]cl
 pyvenv.cfg
 pip-selfcheck.json

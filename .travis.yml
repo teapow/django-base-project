@@ -1,0 +1,28 @@
+language: python
+python:
+ - "3.6"
+cache: pip
+sudo: false
+services:
+  - docker
+
+env:
+  - DJANGO_SETTINGS_MODULE=project.settings.travis
+
+install: pip install -r requirements-dev.txt
+
+script:
+  - flake8
+  - python manage.py makemigrations simple_authentication
+  - python manage.py migrate
+  - python manage.py test
+  - docker build . --tag=docker.tomm.io/teapow/site:latest
+  - docker-compose --project-name=site up -d
+  - sleep 3
+  - docker exec site_uwsgi_1 python manage.py runscript test_integration
+
+deploy:
+  provider: script
+  script: bash docker-push.sh
+  on:
+    branch: master

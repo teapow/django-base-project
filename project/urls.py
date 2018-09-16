@@ -31,6 +31,7 @@ admin.site.site_title = settings.PROJECT_NAME
 
 class AdminSettingsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     """View class for rendering the admin-settings page."""
+
     extra_context = {
         "title": "Settings",
         "has_permission": True,

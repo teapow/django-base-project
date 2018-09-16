@@ -10,7 +10,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        )
+    )
+)
 
 PROJECT_NAME = os.environ.get("DJANGO_PROJECT_NAME", "Site")
 
@@ -130,8 +136,3 @@ STATICFILES_DIRS = [
 STATIC_ROOT = "static-collection"
 
 STATIC_URL = "/static/"
-
-try:
-    from .local_settings import *
-except ImportError:
-    pass

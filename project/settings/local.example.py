@@ -1,12 +1,10 @@
 """Local development settings."""
 
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-SECRET_KEY = "SECRET_KEY_GOES_HERE"
+from . import *
 
 DEBUG = True
+
+SECRET_KEY = "SECRET_KEY_GOES_HERE"
 
 DATABASES = {
     "default": {

@@ -10,13 +10,11 @@ volumes:
 services:
   database:
     image: postgres:10-alpine
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
@@ -37,6 +35,7 @@ services:
     environment:
       - DJANGO_DB_HOST=database
       - DJANGO_SECRET_KEY=SECRET_KEY_GOES_HERE
+      - DJANGO_SETTINGS_MODULE=project.settings.travis
     volumes:
       - media_volume:/app/media
       - nginx_volume:/app/nginx
@@ -45,3 +44,5 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    links:
+      - database
